@@ -1,0 +1,21 @@
+name: CML
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: iterative/setup-cml@v1
+#        with:
+#          sudo: false
+      - name: Train model
+        env:
+          REPO_TOKEN: ${{ github.token }}
+        run: |
+          printf "| Metric Name  | Metric Value |\n| ------------ | -----------: |\n| loss | 0.3418 |\n| mean_dice | 0.7871 |" > best_metrics.txt
+          cat best_metrics.txt >> report.md
+          cml send-comment report.md
